@@ -1,0 +1,56 @@
+# encoding: utf-8
+#
+# Redmine plugin for quick attribute setting of redmine issues
+#
+# Copyright © 2018 Stephan Wenzel <stephan.wenzel@drwpatent.de>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+
+# German strings go here for Rails i18n
+
+en:
+  date:
+    formats:
+      datemacro: "%A, %B %d, %Y"
+      letter:        "%B %d, %Y"
+  time:
+    formats:
+      datemacro: "%A, %B, %d, %Y at %T (%Z)"
+
+  # project module name
+  project_module_redmine_auto_resubmission: "Auto Resubmission"
+
+  # permission strings
+  permission_test_resubmission: "Test resubmission-rules"
+  permission_calc_resubmission: "Recalculate resubmissions of all tickets"
+
+  # plugin configuration page
+  label_configure_resubmission_fields: "Configure Fields for Redmine Auto Resubmission"
+  label_setting_custom_field_id_date: "Field for resubmission-date"
+  label_setting_custom_field_id_rule: "Field für recurring resubmissions"
+  label_setting_resubmit_with_issue_status_id: "Status for resubmission"
+  label_resubmission_notice: "Text for resubmission notice in issue"
+  
+  label_resubmission_date: "Resubmission-date"
+  label_test_resubmission_rule: "Test resubmission rule"
+  label_new_resubmission_rule: "New resubmission-rule"
+  label_input_resubmission_rule: "Input resubmission-rule"
+  label_input_start_date: "Input start-date"
+
+  # manual resubmission of issues
+  label_calc_resubmissions: "Recalculate resubmissions"
+  button_recalculate: "Recalculate"
+  text_successful_resubmission: "Sucessfully checked and resubmitted where applicable %{num} issues"   

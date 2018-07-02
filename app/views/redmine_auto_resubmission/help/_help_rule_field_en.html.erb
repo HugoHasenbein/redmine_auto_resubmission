@@ -1,0 +1,90 @@
+<h3>Field for resubmission-rule</h3>
+
+<p>This custom field should be a text field or a drop-down-list for a predetermined 
+<strong>resubmission-rule</strong> for calculation of a new resubmission date, which is 
+calculated whenever a current resubmission-date lies in the past.</p>
+
+<p>
+<strong>Proposed values: &lt;rule&gt; &lt;decscriptive text&gt;</strong><br />
+
+D1! tomorrow!<br />
+W01! monday!<br />
+W1X wöchentlich<br />
+W2X biweekly<br />
+W3X triweekly<br />
+M1X monthly<br />
+M1F monthly on the 1st<br />
+M1M monthly on the 15th<br />
+M2L monthly on last day of month<br />
+M2X bimonthly<br />
+M2F bimonthly on the 1st<br />
+M2M bimonthly on the 15th<br />
+M2L bimonthly on last day of month<br />
+M3X trimonthly<br />
+M3F trimonthly on the 1st<br />
+M3M trimonthly on the 15th<br />
+M3L trimonthly on last day of month<br />
+M6X twice-a-year<br />
+M6F on the 1st<br />
+M6L on last day of month<br />
+M12X yearly
+</p>
+
+<p>
+The syntax of the resubmission-rule consists of three to four parameters: 
+</p>
+
+<pre>
+1. parameter: epoch-identifier
+
+ D - stands for _D_ays
+ W - stands for _W_eeks
+ m - stands for _m_ondays
+ M - stands for _M_onths
+ q - stands for _q_uarters
+ Y - stands for _Y_ears
+
+2. parameter: integer
+
+ n - stands for the number of epochs
+ 
+3. position of day within epoch 
+
+ F - stands for _F_irst day of epoch, like first day of month, monday, first day of 
+     quarter, or January 1st
+ M - stands for _M_id of epoch, like 15th day of month, wednesday, 15th of 
+     mid-of-quarter or June 30th
+ L - stands for _L_ast of epoch, like last day of month, friday (last working day),
+     last day of quarter or December 31st
+ W - stands for _W_eekday (Monday), if calculated day falls on a Saturday or Sunday
+ X - stands for no correction
+
+3. control of date calculation
+
+ - - the sign "-" is a killswitch. After one date calculation the resubmission rule is 
+     deleted, so no further resubmissions happen
+ ! - the sign "!" is a force sign to force date calculation even if a resubmission date
+     present
+ * - the sign "*" is a mock switch. The mock-switch is deleted from the resubmission-rule
+     and no resubmission-date is calculated. Needed for Redmine Attribute-Quickie plugin
+     
+     The control signs must be present in the above order, namely: - ! *. Any arbitrary
+     subset of the control signs or all of the three control signs may be omitted.
+     
+Example: W1F - one week further, first day, so monday 
+Example: M3M - three months further from today, mid-day, so 15th of month
+Example: q1- - next quarter, first day of quarter, so 1st Jan., Apr., Jul. or Oct., after
+               one calculation further calculations are stopped, riule is deleted.
+Example: D1- - tomorrow, then delete rule 
+Example: D1-! - tomorrow!, even if a resubmission-date is present in the 
+               resubmission-date-field
+               
+Resubmission dates are always calculated for the future, never for the past. 
+So W0F would calculate "next monday"", if calculated on a friday, though W0 stands for 
+this week (W0 zero weeks further, first day, monday) and would calculate last monday. 
+In this case, the calculated date is advanced monday further into the future.
+So q0M would calculate "next quarter mid-term" if calculated near to lapse of current 
+quarter. In this case the calculated date is advanced one quarter into the future.
+ 
+</pre>
+

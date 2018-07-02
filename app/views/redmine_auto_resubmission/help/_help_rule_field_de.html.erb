@@ -1,0 +1,90 @@
+<h3>Feld für Wiedervorlage-Regel</h3>
+
+<p>Dieses benutzerdefinierte Feld sollte ein Text-Feld oder eine Drop-Down-Liste für 
+ausgewählte <strong>Wiedervorlage-Regeln</strong> zum Berechnen eines neuen 
+Wiedervorlage-Datums sein, das immer dann berechnet wird, wenn das aktuelle 
+Wiedervorlage-Datum in der Vergangenheit liegt.</p>
+
+<p>
+<strong>Vorgeschlagene Werte: &lt;Regel&gt; &lt;Hinweistext&gt; </strong><br />
+D1! morgen!<br />
+W01! montag!<br />
+W1X wöchentlich<br />
+W2X zweiwöchentlich<br />
+W3X dreiwöchentlich<br />
+M1X monatlich<br />
+M1F monatlich am 1.<br />
+M1M monatlich am 15.<br />
+M2L monatlich am letzten Tag<br />
+M2X zweimonatlich<br />
+M2F zweimonatlich am 1.<br />
+M2M zweimonatlich am 15.<br />
+M2L zweimonatlich am letzten Tag<br />
+M3X dreimonatlich<br />
+M3F dreimonatlich am 1.<br />
+M3M dreimonatlich am 15.<br />
+M3L dreimonatlich am letzten Tag<br />
+M6X halbjährlich<br />
+M6F halbjährlich am 1.<br />
+M6L halbjährlich am letzten<br />
+M12X jährlich
+</p>
+
+<p>
+Der Aufbau der Wiedervorlage-Regel besteht aus drei bis vier Parametern:
+</p>
+
+<pre>
+1. Parameter: Epochen-Zeichen
+
+ D - steht für Tage, von eng. _D_ays
+ W - steht für Wochen, von engl. _W_eeks
+ m - steht für Montage, von engl. _m_ondays
+ M - steht für Monate, von engl. _M_onths
+ q - steht für Quartale, von engl. _q_uarters
+ Y - steht für Jahre, von engl. _Y_ears
+
+2. Parameter: Integer
+
+ n - steht für die Anzahl der Epochen
+
+3. Position des Tages in der Epoche (optional) - nur für W, M, Y und q
+
+ F - steht für den ersten Tag der Epoche, von engl. _F_irst, erster des Monats, Montag, 
+     erster Tag des Quartals, oder der 01. Januar
+ M - steht für den mittigen Tag der Epoche, von engl. _M_id, der 15. des Monats, Mittwoch,
+     der 15. der Quartalmitte, oder der 30.Juni
+ L - steht für den letzten Tag der Epoche, von engl. _L_ast, letzter Tag des Monats, 
+     Freitag (letzter Arbeitstag), letzter Tag des Quartals, oder der 31. Dezember
+ W - steht für Wochentag (Montag), wenn der berechnete Tag auf Samstag oder Sonntag fällt
+ X - steht für 'keine Korrektur'
+ 
+4. Steuerung der Datumsberechnung
+
+ - - das Zeichen "-" ist das Abbruchszeichen. nach einmaliger Berechnung des neuen Datums 
+     wird die Regel gelöscht.
+ ! - das Zeichen "!" ist das Zeichen zum Erzwingen eines neuen Datums, obwohl ein Datum in
+     dem Wiedervorlagefeld steht
+ * - das Zeichen "*" verhindert das Berechnen eines Datums, wobei "*" aus der Regel 
+     gelöscht wird. Notwendig für das Plugin Redmine Attribute-Quickies
+     
+     Die drei Steuerzeichen müssen in der oben angeführten Reihenfolge vorgegeben werden,
+     nämlich - ! *, wobei jede Untermenge der Zeichen oder alle Zeichen ausgelassen werden 
+     können.
+
+Beispiel: W1F - eine Woche weiter, erster Tag, also Montag
+Beispiel: M3M - drei Monate ab heute, mittiger Tag, also der 15. des Monats
+Beispiel: q1F- - nächstes Quartal, erster Tag des Quartals, also der 1. Jan., Apr., Jul. 
+                oder Okt., nach einmaliger Berechnung wird die Regel gelöscht 
+                (Einmalvorlage)               
+Beispiel: D1- - morgen, dann Regel löschen
+Beispiel: D1-! - morgen!, auch wenn ein anderes Wiedervorlage-Datum bereits notiert ist
+
+Es wird stets ein Datum in der Zukuft berechnet, niemals in der Vergangenheit.
+So würde für W0F an einem Freitag (W0 - diese Woche oder 0 Wochen weiter, Montag)
+ein Tag in der Vergangenheit berechnet. In diesem Fall wird der nächste Montag berechnet.
+So würde für für q0M (q0 - dieses Quartal oder 0 Quartale weiter) die Mitte des Quartals
+berechnet, wenn das Quartal fast verstrichen ist. In diesem Fall wird das entsprechende
+Datum im nächsten Quartal berechnet.
+</pre>
+

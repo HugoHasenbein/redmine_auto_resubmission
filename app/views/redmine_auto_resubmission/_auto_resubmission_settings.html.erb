@@ -1,0 +1,65 @@
+<script type="text/javascript" charset="utf-8">
+
+function testresubmissionrule(url, form) {
+  if(form.value=='') 
+  	return;
+  $.ajax({
+    url: url,
+    type: 'put',
+    data: $(form).serialize()
+  });
+}
+</script>
+<fieldset class="box tabular"><legend><%= l(:label_configure_resubmission_fields)%></legend>
+<%- custom_fields_issues = CustomField.where("type = 'IssueCustomField'") %>
+<p>
+  <%= label_tag( 'settings[custom_field_id_rule]', l(:label_setting_custom_field_id_rule)) %>
+  <%= select_tag('settings[custom_field_id_rule]', options_for_select([['', 0]] + custom_fields_issues.collect{|c| [c.name, c.id]}, (@settings['custom_field_id_rule'] || 0))) %>
+</p>
+<%- custom_fields_issues = CustomField.where("type = 'IssueCustomField'") %>
+<p>
+  <%= label_tag( 'settings[custom_field_id_date]', l(:label_setting_custom_field_id_date)) %>
+  <%= select_tag('settings[custom_field_id_date]', options_for_select([['', 0]] + custom_fields_issues.collect{|c| [c.name, c.id]}, (@settings['custom_field_id_date'] || 0))) %>
+</p>
+<%- custom_fields_issues = IssueStatus.where("is_closed <> 1") %>
+<p>
+  <%= label_tag( 'settings[issue_status_id]', l(:label_setting_resubmit_with_issue_status_id)) %>
+  <%= select_tag('settings[issue_status_id]', options_for_select([['', 0]] + custom_fields_issues.collect{|c| [c.name, c.id]}, (@settings['issue_status_id'] || 0))) %>
+</p>
+<p>
+  <%= label_tag( 'settings[resubmission_notice]', l(:label_resubmission_notice)) %>
+  <%= text_area_tag('settings[resubmission_notice]',  @settings['resubmission_notice'], :cols => 20 ) %>
+</p>
+</fieldset>
+
+<fieldset class="box tabular"><legend><%= l(:label_test_resubmission_rule)%></legend>
+<p>
+  <label><%= l(:label_input_start_date) %></label><%= text_field_tag :startdate %>
+</p>
+<p>
+  <label><%= l(:label_input_resubmission_rule) %></label><%= text_field_tag :rule %>
+</p>
+<p>
+  <%= link_to l(:label_test_resubmission_rule), "#",
+			  :remote => true,
+			  :onclick => "testresubmissionrule('#{url_for(:controller => 'resubmissions', :action => 'test_resubmission_rule', :feedback_tag => 'testresubmissionrule_area', :user_id => User.current.id.to_s)}', $( this ).parents('form'))",
+			  :class => "" %>
+</p>
+<div id="testresubmissionrule_area">&nbsp;</div>
+<%= toggle_link l(:label_help), 'redmine_auto_eresubmission_help' %>
+</fieldset>
+
+<fieldset class="box" id="redmine_auto_eresubmission_help" style="display:none;">
+<%= render "redmine_auto_resubmission/help/help_rule_field_#{I18n.locale}" rescue render 'redmine_auto_resubmission/help/help_rule_field_en' %>
+<%= render "redmine_auto_resubmission/help/help_date_field_#{I18n.locale}" rescue render 'redmine_auto_resubmission/help/help_date_field_en' %>
+<%= render "redmine_auto_resubmission/help/help_status_id_field_#{I18n.locale}" rescue render 'redmine_auto_resubmission/help/help_status_id_field_en' %>
+<%= render "redmine_auto_resubmission/help/help_text_field_#{I18n.locale}" rescue render 'redmine_auto_resubmission/help/help_text_field_en' %>
+</fieldset>
+
+<fieldset class="box tabular"><legend><%= l(:label_calc_resubmissions)%></legend>
+<p>
+<%= link_to l(:button_recalculate), calc_resubmissions_path,
+                    :data => {:confirm => l(:text_are_you_sure)},
+                    :method => :get,
+                    :title => l(:button_recalculate) %>
+</p>

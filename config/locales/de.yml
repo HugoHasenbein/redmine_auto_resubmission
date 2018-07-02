@@ -1,0 +1,56 @@
+# encoding: utf-8
+#
+# Redmine plugin for quick attribute setting of redmine issues
+#
+# Copyright © 2018 Stephan Wenzel <stephan.wenzel@drwpatent.de>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+
+# German strings go here for Rails i18n
+
+de:
+  date:
+    formats:
+      datemacro: "%A, den %d. %B, %Y"
+      letter:        "den %d. %B, %Y"
+  time:
+    formats:
+      datemacro: "%A, den %d. %B, %Y um %T (%Z)"
+
+  # project module name
+  project_module_redmine_auto_resubmission: "Auto-Wiedervorlage (Auto Resubmission)"
+
+  # permission strings
+  permission_test_resubmission: "Wiedervorlage-Regeln testen"
+  permission_calc_resubmission: "Wiedervorlagen aller Ticktes neu berechnen"
+
+  # plugin configuration page
+  label_configure_resubmission_fields: "Felder für Redmine Auto Resubmission konfigurieren"
+  label_setting_custom_field_id_date: "Feld für Wiedervorlage-Datum"
+  label_setting_custom_field_id_rule: "Feld für Wiedervorlage-Regel"
+  label_setting_resubmit_with_issue_status_id: "Status bei Wiedervorlage"
+  label_resubmission_notice: "Text für Wiedervorlage im Ticket"
+  
+  label_resubmission_date: "Wiedervorlage-Datum"
+  label_test_resubmission_rule: "Wiedervorlage-Regel testen"
+  label_new_resubmission_rule: "Neue Wiedervorlage-Regel"
+  label_input_resubmission_rule: "Wiedervorlage-Regel eingeben"
+  label_input_start_date: "Start-Datum eingeben"
+  
+  # manual resubmission of issues
+  label_calc_resubmissions: "Wiedervorlagen berechnen"
+  button_recalculate: "Berechnen"
+  text_successful_resubmission: "Erfolgreich %{num} Tickets auf Wiedervorlage geprüft und ggf. wiedervorgelegt"   
