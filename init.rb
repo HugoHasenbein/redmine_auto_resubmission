@@ -23,9 +23,9 @@ Redmine::Plugin.register :redmine_auto_resubmission do
   name 'Redmine Auto Resubmission plugin'
   author 'Stephan Wenzel'
   description 'This plugin provides an automatic resubmission tool for issues'
-  version '0.0.1'
-  url 'http://example.com/path/to/plugin'
-  author_url 'http://example.com/about'
+  version '1.0.2'
+  url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'
+  author_url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'
 
   settings :default => {'custom_field_id_date' 	=> '0',
                         'custom_field_id_rule' 	=> '0',
