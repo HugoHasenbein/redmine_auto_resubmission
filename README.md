@@ -140,4 +140,27 @@ There is two ways:
 
 a) first way is elegant, but requires cron. There is a rake task added to the plugin. In the Rails root directory type in
 
-`rake 
+`export RAILS_ENV=production; rake redmine:resubmit:resubmit_issues`
+
+The above line called with cron once a day short after midnight, calculates all resubmissions. Lookup how to configure cron jobs. Be aware to properly set the RAILS_ENV variable and execute cron with the right user rights and environment for rails.
+
+b) second way is to call the following url 
+
+`http://<your redmine host>/calc_resubmissions`
+
+You need to have the above Recalculate-resubmissions-of-all-tickets privilege to call that url.
+
+That' about it.
+
+**Have fun!**
+
+### Localizations
+
+* German
+* English
+
+### Change-Log
+
+1.0.2 initial commit 
+1.0.1 running on redmine 3.4.6
+1.0.0 running on redmine 3.3.3
