@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Redmine plugin for quick attribute setting of redmine issues
+# Redmine plugin for provides a resubmission tool for issues
 #
 # Copyright © 2018 Stephan Wenzel <stephan.wenzel@drwpatent.de>
 #
@@ -22,7 +22,7 @@
 Redmine::Plugin.register :redmine_auto_resubmission do
   name 'Redmine Auto Resubmission plugin'
   author 'Stephan Wenzel'
-  description 'This plugin provides an automatic resubmission tool for issues'
+  description 'This plugin provides a resubmission tool for issues'
   version '1.0.2'
   url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'
   author_url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'

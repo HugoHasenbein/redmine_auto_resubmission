@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Redmine plugin for quick attribute setting of redmine issues
+# Redmine plugin for provides a resubmission tool for issues
 #
 # Copyright © 2018 Stephan Wenzel <stephan.wenzel@drwpatent.de>
 #
@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-Rails.configuration.to_prepare do
+.configuration.to_prepare do
 
   # main library
   require 'redmine_auto_resubmission/redmine_auto_resubmission_lib'
