@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-.configuration.to_prepare do
+Rails.configuration.to_prepare do
 
   # main library
   require 'redmine_auto_resubmission/redmine_auto_resubmission_lib'
