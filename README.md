@@ -12,19 +12,21 @@ An job is done. Need to follow up in a week or two? Mark the issue to reappear t
 
 ### Install
 
-1. go to plugins folder
+1. download plugin and copy plugin folder redmine_auto_resubmission go to Redmine's plugins folder 
 
-`git clone https://github.com/HugoHasenbein/redmine_auto_resubmission.git`
+2. restart server f.i.
 
-2. restart server f.i.  `sudo /etc/init.s/apache2 restart`
+`sudo /etc/init.d/apache2 restart`
 
 ### Uninstall
 
-1. go to plugins folder
+1. go to plugins folder, delete plugin folder redmine_auto_resubmission
 
 `rm -r redmine_auto_resubmission`
 
-2. restart server f.i.  `sudo /etc/init.s/apache2 restart`
+2. restart server f.i.
+
+`sudo /etc/init.d/apache2 restart`
 
 ### Use
 
