@@ -31,11 +31,11 @@ M12X jährlich
 </p>
 
 <p>
-Der Aufbau der Wiedervorlage-Regel besteht aus drei bis vier Parametern:
+Der Aufbau der Wiedervorlage-Regel besteht aus mindestens zwei Parametern:
 </p>
 
 <pre>
-1. Parameter: Epochen-Zeichen
+1. Parameter: Epochen-Zeichen (notwendig)
 
  D - steht für Tage, von eng. _D_ays
  W - steht für Wochen, von engl. _W_eeks
@@ -44,7 +44,7 @@ Der Aufbau der Wiedervorlage-Regel besteht aus drei bis vier Parametern:
  q - steht für Quartale, von engl. _q_uarters
  Y - steht für Jahre, von engl. _Y_ears
 
-2. Parameter: Integer
+2. Parameter: Integer (notwendig)
 
  n - steht für die Anzahl der Epochen
 
@@ -59,19 +59,15 @@ Der Aufbau der Wiedervorlage-Regel besteht aus drei bis vier Parametern:
  W - steht für Wochentag (Montag), wenn der berechnete Tag auf Samstag oder Sonntag fällt
  X - steht für 'keine Korrektur'
  
-4. Steuerung der Datumsberechnung
+4. Steuerung der Datumsberechnung (optional)
 
- - - das Zeichen "-" ist das Abbruchszeichen. nach einmaliger Berechnung des neuen Datums 
+ - - das Zeichen "-" ist das Abbruchszeichen. Nach einmaliger Berechnung des neuen Datums 
      wird die Regel gelöscht.
  ! - das Zeichen "!" ist das Zeichen zum Erzwingen eines neuen Datums, obwohl ein Datum in
-     dem Wiedervorlagefeld steht
+     dem Wiedervorlagefeld steht und das Wiedervorlagedatum in der Zukunft liegt
  * - das Zeichen "*" verhindert das Berechnen eines Datums, wobei "*" aus der Regel 
      gelöscht wird. Notwendig für das Plugin Redmine Attribute-Quickies
      
-     Die drei Steuerzeichen müssen in der oben angeführten Reihenfolge vorgegeben werden,
-     nämlich - ! *, wobei jede Untermenge der Zeichen oder alle Zeichen ausgelassen werden 
-     können.
-
 Beispiel: W1F - eine Woche weiter, erster Tag, also Montag
 Beispiel: M3M - drei Monate ab heute, mittiger Tag, also der 15. des Monats
 Beispiel: q1F- - nächstes Quartal, erster Tag des Quartals, also der 1. Jan., Apr., Jul. 

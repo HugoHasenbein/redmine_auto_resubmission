@@ -38,13 +38,22 @@ en:
   permission_calc_resubmission: "Recalculate resubmissions of all tickets"
 
   # plugin configuration page
-  label_configure_resubmission_fields: "Configure Fields for Redmine Auto Resubmission"
+  label_configure_resubmission_fields: "Configure fields for Redmine Auto Resubmission"
   label_setting_custom_field_id_date: "Field for resubmission-date"
   label_setting_custom_field_id_rule: "Field für recurring resubmissions"
   label_setting_resubmit_with_issue_status_id: "Status for resubmission"
   label_resubmission_notice: "Text for resubmission notice in issue"
   
+  label_configure_extend_start_date_fields: "Configure field for start date extension"
+  label_setting_custom_field_id_start_date_rule: "Field for due date rule"
+  label_setting_start_date_extension_issue_status_id: "Status after start date extension"
+  
+  label_configure_extend_due_date_fields: "Configure field for due date extension"
+  label_setting_custom_field_id_due_date_rule: "Field for due date rule"
+  label_setting_due_date_extension_issue_status_id: "Status after due date extension"
+  
   label_resubmission_date: "Resubmission-date"
+
   label_test_resubmission_rule: "Test resubmission rule"
   label_new_resubmission_rule: "New resubmission-rule"
   label_input_resubmission_rule: "Input resubmission-rule"

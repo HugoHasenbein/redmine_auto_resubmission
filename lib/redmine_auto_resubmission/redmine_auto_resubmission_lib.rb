@@ -23,176 +23,113 @@ module RedmineAutoResubmission
 
   def self.calc_all_resubmission_dates
   
-    @issue_status_id        = Setting['plugin_redmine_auto_resubmission']['issue_status_id']
-    @custom_field_id_date   = Setting['plugin_redmine_auto_resubmission']['custom_field_id_date']
-    @custom_field_id_rule   = Setting['plugin_redmine_auto_resubmission']['custom_field_id_rule']
+    new_status_id             = Setting['plugin_redmine_auto_resubmission']['issue_status_id'].presence
+    custom_field_id_date      = Setting['plugin_redmine_auto_resubmission']['custom_field_id_date']
+    issue_resubmission_notice = Setting['plugin_redmine_auto_resubmission']['resubmission_notice'].to_s
     
-    @cf = CustomField.find(@custom_field_id_date)     
+    issues                    = []
+    new_notice                = issue_resubmission_notice.gsub(/##/, User.current.name )
     
-    @trackers  = @cf.trackers
-    # search issues having a concrete resubmission date
-    @issues    =    Issue.
-      where(:tracker_id => @trackers).
-      joins("INNER JOIN custom_values ON custom_values.customized_id = issues.id").
-      where("custom_values.customized_type LIKE 'Issue'").
-      where("custom_values.custom_field_id IN (#{@custom_field_id_date}, #{@custom_field_id_rule})").
-      where("custom_values.value NOT LIKE ''").
-      distinct.
-      to_a
+    if custom_field_id_date.present?
+    
+      # search issues having a concrete resubmission date
+      # careful: CAST(custom_values.value as DATE) <= NOW()
+      # may fail, because sql is not good in error catching
+      issues = Issue.
+        joins(:custom_values).
+        where("custom_values.custom_field_id = ?", custom_field_id_date).
+        where("custom_values.value NOT LIKE ''").
+        where("custom_values.value IS NOT NULL").
+        where("CAST(custom_values.value as DATE) <= NOW()").
+        distinct.
+        to_a
+          
+      issues.each do |issue|
       
-    calc_resubmission_dates( @issues )
-  end #def
-  
-  # ----------------------------------------------------------------------------------- #
-  def self.calc_resubmission_dates( issues )
-  
-                    
-    issues.each do |issue|
-
-      datefield     = issue.custom_field_values.select {|v| v.custom_field_id == @custom_field_id_date.to_i}.first # will have only one   
-      rulefield     = issue.custom_field_values.select {|v| v.custom_field_id == @custom_field_id_rule.to_i}.first # will have only one
-      new_journal   = Journal.new(:journalized => issue, :user => User.current || User.anonymous )      
-                                                  
-      begin
-        date = datefield.value.in_time_zone(Time.zone.name)
-      rescue
-        date = nil
-      end
-      today         = Date.today
-      #today         = DateTime.now.in_time_zone(Time.zone.name).beginning_of_day
-      new_date      = date
-      new_rule      = rulefield.value
-      new_status_id = issue.status_id
-      resubmitted   = false
-      
-
-      if date.blank?
-        # blank date or faulty date string => calculate first resubmission date
-        # rule must be present, due to the SQL stement  
-        new_date, new_rule  = calcfuturedate( today, rulefield.value )     
-      end #if
-      
-      if (date.present? && (today >= date))     
-        # today is newer than date or equal  => resubmit
-        if rulefield.value.present? 
-          # calculate next resubmission for recurring resubmission
-          new_date, new_rule    = calcfuturedate( date, rulefield.value ) 
-        else
-          # delete date - this is only this one resubmission
-          new_date  = nil
-        end
+        # mark issue with resubmission notice
+        new_journal = issue.init_journal( User.current, new_notice )
+        new_journal.save # save journal triggers update_at field of parent issue
         
-        new_status_id   = @issue_status_id 
-        resubmitted     = true
-
-      end # if
+        # update issue status without triggering call_backs
+        issue.update_columns({:status_id => new_status_id, :updated_on => Time.now}.compact)
+        
+      end #each
       
-      # --- keep changes of issue status --- #
-      if (issue.status_id.to_i != new_status_id.to_i)
-        new_journal.details << JournalDetail.new(:property  => 'attr', 
-                                                 :prop_key  => "status_id", 
-                                                 :old_value => issue.status_id, 
-                                                 :value     => new_status_id 
-                                                )
-        issue.status_id = new_status_id.to_i
-      end #if
-
-      # --- keep changes of resubmission date --- #
-      if new_date != date
-        new_journal.details << JournalDetail.new(:property  => 'cf', 
-                                                 :prop_key  => datefield.custom_field_id, 
-                                                 :old_value     => datefield.value, 
-                                                 :value         => new_date.present? ? new_date.strftime("%Y-%m-%d") : ""
-                                                ) 
-        datefield.value     = new_date.present? ? new_date.strftime("%Y-%m-%d") : ""    
-      end #if
-                                              
-      # --- keep changes of resubmission rule --- #
-      if rulefield.value != new_rule
-        new_journal.details << JournalDetail.new(:property  => 'cf', 
-                                                 :prop_key  => rulefield.custom_field_id, 
-                                                 :old_value     => rulefield.value, 
-                                                 :value         => new_rule 
-                                                ) 
-        rulefield.value     = new_rule
-      end #if
-      
-      # --- post message --- #
-      if resubmitted && Setting['plugin_redmine_auto_resubmission']['resubmission_notice'].present?
-        new_journal.notes = Setting['plugin_redmine_auto_resubmission']['resubmission_notice']
-      end #if
-
-      if new_journal.details.any? || resubmitted
-        issue.touch # mark as updated
-        issue.save! # saves journals 
-        new_journal.save!
-      end
-      
-    end #each
+    end # if
     
     issues.length
     
   end #def
-
-
-
+  
+  
   # ----------------------------------------------------------------------------------- #
-  def self.calcfuturedate( startdate, rule, options = {} )
+  def self.parse_rule(rule)
+  
+    m = {}
+    matches = /(?<epoch>[DWMYCmq])(?<num>[0-9]+)(?<pos>[XFMLW]?)(?<kfm>[-!\*]*)(?<trailing_rest>.*)/.match(rule)
+    
+    if matches.present?
+      m.merge!(Hash[ matches.names.zip( matches.captures ) ])
+      m.merge!('killswitch' => m['kfm'].match(/-/).to_s)
+      m.merge!('force'      => m['kfm'].match(/!/).to_s)
+      m.merge!('mockswitch' => m['kfm'].match(/\*/).to_s)
+    end
+    m
+  end #def
+  
+  
+  # ----------------------------------------------------------------------------------- #
+  def self.calcfuturedate( obj, rule )
+    
+    date = case obj.class.name
+      when "Date", "DateTime"
+        obj
+      when "String"
+        obj.to_date rescue nil
+      else
+        obj.respond_to?(:date) ? obj.date : nil
+    end
+    
+    new_date = date
+    new_rule = rule
     
     if rule.present?
     
-      matches = /([DWMYCmq])([0-9]+)([XFMLW]?)(-?)(!?)(\*?)(.*)/.match(rule)
-    
-      epoch, num, pos, killswitch, force, mockswitch, trailing_rest = matches.present? ? matches.captures : ["", "", "", "", "", "", ""]
-
-      if mockswitch.present?
+      m = parse_rule( rule )
+      
+      if m['mockswitch'].present?
       
         # mockswitch does not calculate anything
-        # mockswitch is removed, however
-        new_date = nil
-        new_rule = "#{epoch}#{num}#{pos}#{killswitch}#{force}#{trailing_rest}"
+        # mockswitch is removed from new_rule, however
+        new_rule = unmock( rule, m )
         
-      elsif ( epoch.present? && num.present? )
+      elsif date.blank? || date <= Date.today || m['force'].present?
       
-        if options[:override].present?
+        if( m['epoch'].present? && m['num'].present? )
         
-		  # "!" overrides date by force
-		  if force.present?
-            new_date = advance_date( startdate, epoch, num ) 
-            new_date = adjust_date(  new_date,  epoch, pos ) 
-			new_rule = nil
-		  else
-		    # override protection: do not recalculate
-		    # returning nil means: do not change 
-			new_date = nil
-            new_rule = nil
-		  end #if
-		  
-        else # no override (normal case)
-          new_date = advance_date( startdate, epoch, num ) 
-          new_date = adjust_date(  new_date,  epoch, pos ) 
-        
-		  if killswitch.present?
-			new_rule = ""
-		  else
-			new_rule = rule
-		  end #if
-        
-        end
-        
-      else # epoch an num is not present: do not calculate date
-        new_date = startdate
-        new_rule = rule
+          startdate = date.presence || Date.today
+          new_date  = advance_date( startdate, m['epoch'], m['num'] ) 
+          new_date  = adjust_date(  new_date,  m['epoch'], m['pos'] ) 
+          new_date  = (new_date > startdate ? new_date : nil )
+          new_rule  = "" if m['killswitch'].present?
+          
+        end #if
       end #if
-      
-    else # no rule is present: do not calculate
-      new_date = startdate
-      new_rule = rule
     end #if
     
     [new_date, new_rule]
+    
   end #def
 
+  # ----------------------------------------------------------------------------------- #
+  def self.unmock( rule, m=nil )
+    m = parse_rule( rule ) unless m
+    if m['mockswitch'].present?
+      "#{m['epoch']}#{m['num']}#{m['pos']}#{m['killswitch']}#{m['force']}#{m['trailing_rest']}"
+    else
+      nil
+    end
+  end #def
   # ----------------------------------------------------------------------------------- #
   # calculate n times advance of epoch
   # epoch: D - n days
@@ -200,14 +137,14 @@ module RedmineAutoResubmission
   # epoch: M - n months
   # epoch: Y - n years
   #
-  # epoch: C - n calendar weeks
+  # epoch: C - n calendar weeks (absolute, not relative)
   # epoch: m - n mondays
   # epoch: q - q quarters
   
   def self.advance_date( startdate, epoch, num )
   
-    today = DateTime.now.in_time_zone(Time.zone.name).beginning_of_day
-		  
+    today = User.current.today
+          
     case epoch  
       when "D"
           new_date = startdate.advance( :days => num.to_i)        
@@ -223,10 +160,10 @@ module RedmineAutoResubmission
       when "q"
           new_date = startdate.advance( :months => 3 * num.to_i).beginning_of_quarter
           #new_date = startdate.advance( :months => 3 * (num.to_i+1)).beginning_of_quarter if new_date <= today 
-	  when "C"
-		  # calendar week 1 is the week containing Jan. 4th
-		  new_date = DateTime.new(startdate.year, 1, 4).advance( :weeks => (num.to_i - 1))
-		  #new_date = DateTime.new(startdate.year+1, 1, 4).advance( :weeks => (num.to_i - 1)) if new_date <= today
+      when "C"
+          # calendar week 1 is the week containing Jan. 4th
+          new_date = DateTime.new(startdate.year, 1, 4).advance( :weeks => (num.to_i - 1))
+          #new_date = DateTime.new(startdate.year+1, 1, 4).advance( :weeks => (num.to_i - 1)) if new_date <= today
       else
           new_date = startdate
     end #case
@@ -244,7 +181,7 @@ module RedmineAutoResubmission
 
   def self.adjust_date( startdate, epoch, pos )
   
-  	today = DateTime.now.in_time_zone(Time.zone.name).beginning_of_day
+    today = User.current.today
 
     case epoch
       when "D"
@@ -362,7 +299,7 @@ module RedmineAutoResubmission
       else
         new_date = startdate
     end #case epoch
-
+    
     new_date > today ? new_date : startdate
     
   end #def  

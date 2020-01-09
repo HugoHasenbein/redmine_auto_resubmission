@@ -1,4 +1,3 @@
-<%- result_text = "<div class='flash notice'><label>#{l(:label_resubmission_date)}:</label> #{@new_date ? I18n.localize(@new_date, :format => :datemacro ) : "&nbsp;"}<br><label>#{l(:label_new_resubmission_rule)}:</label> #{@new_rule.present? ? @new_rule : "&nbsp;"}</div>" %>
-$('#<%= escape_javascript @feedback_tag %>').html('<%= escape_javascript result_text.html_safe %>');
+$('#<%= escape_javascript @feedback_tag %>').html('<%= escape_javascript render "/resubmissions/test_result" %>');
 $('input#startdate').val('<%= "#{@new_date ? @new_date.strftime("%F") : "" }" %>');
 $('input#rule').val('<%= @new_rule %>');

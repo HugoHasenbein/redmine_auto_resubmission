@@ -1,0 +1,10 @@
+<div class='flash notice'>
+  <p>
+    <label><%= l(:label_resubmission_date)     %></label>
+      <span style="line-height:24px;"><%= @new_date.present? ? I18n.localize(@new_date, :format => :datemacro ) : '&nbsp;' %></span>
+  </p>
+  <p>
+    <label><%= l(:label_new_resubmission_rule) %></label>
+      <span style="line-height:24px;"><%= @new_rule.present? ? @new_rule : '&nbsp;' %></span>
+  </p>
+</div>

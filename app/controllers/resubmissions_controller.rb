@@ -23,7 +23,7 @@ class ResubmissionsController < ApplicationController
 
   unloadable
 
-  before_filter :authorize_global
+  before_action :authorize_global
 
   # ------------------------------------------------------------------------------------ #
   def test_resubmission_rule 
@@ -39,10 +39,10 @@ class ResubmissionsController < ApplicationController
       @new_date, @new_rule = RedmineAutoResubmission.calcfuturedate( @startdate, params[:rule] )
       @feedback_tag = params[:feedback_tag]
       
-	  respond_to do |format|
-		format.js   { } # renders calc_date.js.erb
-	  end
-	  
+      respond_to do |format|
+        format.js   { } # renders calc_date.js.erb
+      end
+      
     rescue Exception => e 
       flash[:error] = e.message
       redirect_to :back    

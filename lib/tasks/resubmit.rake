@@ -47,7 +47,7 @@ END_DESC
         puts "example: D1- - tomorrow, then delete rule"
         puts ""
         puts "be careful:"
-        puts "example: m0  - monday of current week - may calculate date in the past"
+        puts "example: m0  - monday of current week - will not calculate date in the past"
         puts ""
         puts ""     
  

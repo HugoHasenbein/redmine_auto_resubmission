@@ -28,7 +28,12 @@ module RedmineAutoResubmissionIssuePatch
         base.class_eval do
           unloadable
           
-          alias_method_chain :catch_macros, :context
+          if Rails::VERSION::MAJOR >= 5
+            alias_method :catch_macros_without_context, :catch_macros
+            alias_method :catch_macros, :catch_macros_with_context
+          else #Rails
+            alias_method_chain :catch_macros, :context
+          end #if
           
         end #base
       end #self

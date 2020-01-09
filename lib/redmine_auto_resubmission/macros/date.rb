@@ -24,17 +24,17 @@ require 'i18n'
 module RedmineAutoResubmission
   module WikiMacros
   
-	Redmine::WikiFormatting::Macros.register do
-
-		desc "calculate date and return a string, {{date(W1)}} would produce a date one week from now" 
-		macro :date do |obj, args|
-		  _rule   = args[0].presence || "D0"
-		  _format = args[1].presence || "datemacro"
-		  new_date, new_rule = RedmineAutoResubmission.calcfuturedate( Date.today, _rule )
-		  new_date.blank? ? "????-??-??" : I18n.localize(new_date, format: _format.to_sym) rescue I18n.localize(new_date, format: :datemacro)
-		end #macro
-
-	end #register
-	
+    Redmine::WikiFormatting::Macros.register do
+    
+        desc "calculate date and return a string, {{date(W1)}} would produce a date one week from now" 
+        macro :date do |obj, args|
+          _rule   = args[0].presence
+          _format = args[1].presence || "datemacro"
+          new_date, new_rule = RedmineAutoResubmission.calcfuturedate( Date.today, _rule ) if _rule
+          new_date.blank? ? I18n.localize(Date.today, format: :datemacro) : I18n.localize(new_date, format: _format.to_sym) rescue I18n.localize(new_date, format: :datemacro)
+        end #macro
+        
+    end #register
+    
   end #module
 end #module

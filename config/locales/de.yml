@@ -44,7 +44,16 @@ de:
   label_setting_resubmit_with_issue_status_id: "Status bei Wiedervorlage"
   label_resubmission_notice: "Text für Wiedervorlage im Ticket"
   
+  label_configure_extend_start_date_fields: "Feld für Startdatum-Regel konfigurieren"
+  label_setting_custom_field_id_start_date_rule: "Feld für Startdatum-Regel"
+  label_setting_start_date_extension_issue_status_id: "Status nach Änderung des Startdatums"
+  
+  label_configure_extend_due_date_fields: "Feld für Fälligkeitsdatum-Regel konfigurieren"
+  label_setting_custom_field_id_due_date_rule: "Feld für Fälligkeitsdatum-Regel"
+  label_setting_due_date_extension_issue_status_id: "Status nach Änderung des Fälligkeitsdatums"
+  
   label_resubmission_date: "Wiedervorlage-Datum"
+  
   label_test_resubmission_rule: "Wiedervorlage-Regel testen"
   label_new_resubmission_rule: "Neue Wiedervorlage-Regel"
   label_input_resubmission_rule: "Wiedervorlage-Regel eingeben"

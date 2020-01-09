@@ -19,32 +19,41 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
+# 1.0.3
+#       heavily simplified code
+#
+# 1.0.4
+#       added support for date macro with no arguments => today's date
+# 1.0.5
+#       added support for Rails 5, redmine 4+
+#       fixed a bug, in which resubmission could stop
+
 require 'redmine'
 
 Redmine::Plugin.register :redmine_auto_resubmission do
   name 'Redmine Auto Resubmission plugin'
   author 'Stephan Wenzel'
   description 'This plugin provides a resubmission tool for issues'
-  version '1.0.2'
+  version '1.0.5'
   url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'
   author_url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'
-
-  settings :default => {'custom_field_id_date' 	=> '0',
-                        'custom_field_id_rule' 	=> '0',
-                        'issue_status_id' 		=> '0',
-                        'resubmission_notice' 	=> 'resubmitted'
+  
+  settings :default => {'custom_field_id_date'  => '0',
+                        'custom_field_id_rule'  => '0',
+                        'issue_status_id'       => '0',
+                        'resubmission_notice'   => "automatically resubmitted by plugin 'Redmine Auto Resubmission'"
                         },
            :partial => 'redmine_auto_resubmission/auto_resubmission_settings'
-
+           
   project_module :redmine_auto_resubmission do
     
     # set permissions
     permission :test_resubmission,
                :resubmissions => [:test_resubmission_rule]
-
+               
     permission :calc_resubmissions,
                :resubmissions => [:calc_resubmissions]
-
+               
   end
 end
 
