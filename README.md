@@ -165,6 +165,14 @@ That' about it.
 
 ### Change-Log
 
+1.0.5 Rails 5 / redmine 4+ support
+
+1.0.4 never published
+
+1.0.3 never published
+
 1.0.2 initial commit 
+
 1.0.1 running on redmine 3.4.6
+
 1.0.0 running on redmine 3.3.3
