@@ -20,50 +20,37 @@
 #
 
 class ResubmissionsController < ApplicationController
-
+  
   unloadable
-
+  
   before_action :authorize_global
-
+  
   # ------------------------------------------------------------------------------------ #
   def test_resubmission_rule 
   
-    begin
-      @startdate = Date.parse(params[:startdate])
-    rescue
-      @startdate = Date.today 
+    @startdate           = Date.parse(params[:startdate]) rescue Date.today 
+    @new_date, @new_rule = RedmineAutoResubmission.calcfuturedate( @startdate, params[:rule] )
+    @feedback_tag        = params[:feedback_tag]
+    
+    respond_to do |format|
+      format.js   { } # renders calc_date.js.erb
     end
     
-    begin
-    
-      @new_date, @new_rule = RedmineAutoResubmission.calcfuturedate( @startdate, params[:rule] )
-      @feedback_tag = params[:feedback_tag]
-      
-      respond_to do |format|
-        format.js   { } # renders calc_date.js.erb
-      end
-      
-    rescue Exception => e 
-      flash[:error] = e.message
-      redirect_to :back    
-    end
-    
+  rescue Exception => e 
+    flash[:error] = e.message
+    redirect_to :back    
   end #def
-
+  
   # ------------------------------------------------------------------------------------ #
   def calc_resubmissions
     
-    begin
-      num = RedmineAutoResubmission.calc_all_resubmission_dates
-      flash[:notice] = l(:text_successful_resubmission, :num => num )
-      redirect_to :back    
-
-    rescue Exception => e 
-      flash[:error] = e.message
-      redirect_to :back    
-    end
+    num = RedmineAutoResubmission.calc_all_resubmission_dates
+    flash[:notice] = l(:text_successful_resubmission, :num => num )
+    redirect_to :back    
     
+  rescue Exception => e 
+    flash[:error] = e.message
+    redirect_to :back    
   end #def
-
-
+  
 end #class
