@@ -155,7 +155,7 @@ b) second way is to call the following url
 
 You need to have the above Recalculate-resubmissions-of-all-tickets privilege to call that url.
 
-That' about it.
+That's about it.
 
 **Have fun!**
 
@@ -165,6 +165,8 @@ That' about it.
 * English
 
 ### Change-Log
+
+1.0.6 added support to choose between resubmitting open or all issues
 
 1.0.5 Rails 5 / redmine 4+ support
 
