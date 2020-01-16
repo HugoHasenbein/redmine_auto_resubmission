@@ -2,7 +2,7 @@
 #
 # Redmine plugin for provides a resubmission tool for issues
 #
-# Copyright © 2018 Stephan Wenzel <stephan.wenzel@drwpatent.de>
+# Copyright © 2018-2020 Stephan Wenzel <stephan.wenzel@drwpatent.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,8 +18,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
-
-# English strings go here for Rails i18n
 
 en:
   date:
@@ -41,6 +39,7 @@ en:
   label_configure_resubmission_fields: "Configure fields for Redmine Auto Resubmission"
   label_setting_custom_field_id_date: "Field for resubmission-date"
   label_setting_custom_field_id_rule: "Field für recurring resubmissions"
+  label_setting_open_issues_only: "Only resubmit open tickets"
   label_setting_resubmit_with_issue_status_id: "Status for resubmission"
   label_resubmission_notice: "Text for resubmission notice in issue"
   

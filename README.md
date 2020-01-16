@@ -6,6 +6,7 @@ Redmine plugin to resubmit / follow up (German: "Wiedervorlage") an issue after 
 
 ![PNG that represents a quick overview](/doc/Overview.png)
 
+
 ### Use case
 
 An job is done. Need to follow up in a week or two? Mark the issue to reappear then. The issue will turn up in your current issues then.

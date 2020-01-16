@@ -2,7 +2,7 @@
 #
 # Redmine plugin for provides a resubmission tool for issues
 #
-# Copyright © 2018 Stephan Wenzel <stephan.wenzel@drwpatent.de>
+# Copyright © 2018-2020 Stephan Wenzel <stephan.wenzel@drwpatent.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,29 +18,37 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
-
+#
 # 1.0.3
 #       heavily simplified code
 #
 # 1.0.4
 #       added support for date macro with no arguments => today's date
+#
 # 1.0.5
 #       added support for Rails 5, redmine 4+
 #       fixed a bug, in which resubmission could stop
-
+#
+# 1.0.6 
+#       added support to choose between resubmitting only open tickets or all tickets
+#       fixed a bug, in which tickets would not be updated
+#       simplified code
+#       
 require 'redmine'
 
 Redmine::Plugin.register :redmine_auto_resubmission do
   name 'Redmine Auto Resubmission plugin'
   author 'Stephan Wenzel'
   description 'This plugin provides a resubmission tool for issues'
-  version '1.0.5'
+  version '1.0.6'
   url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'
   author_url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'
   
-  settings :default => {'custom_field_id_date'  => '0',
-                        'custom_field_id_rule'  => '0',
-                        'issue_status_id'       => '0',
+  settings :default => {'custom_field_id_date'            => '',
+                        'custom_field_id_rule'            => '',
+                        'custom_field_id_start_date_rule' => '',
+                        'custom_field_id_due_date_rule'   => '',
+                        'issue_status_id'                 => '',
                         'resubmission_notice'   => "automatically resubmitted by plugin 'Redmine Auto Resubmission'"
                         },
            :partial => 'redmine_auto_resubmission/auto_resubmission_settings'

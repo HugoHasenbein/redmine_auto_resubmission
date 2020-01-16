@@ -2,7 +2,7 @@
 #
 # Redmine plugin for provides a resubmission tool for issues
 #
-# Copyright © 2018 Stephan Wenzel <stephan.wenzel@drwpatent.de>
+# Copyright © 2018-2020 Stephan Wenzel <stephan.wenzel@drwpatent.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,7 +28,16 @@ module RedmineAutoResubmissionIssuePatch
         base.class_eval do
           unloadable
           
-          before_save :update_date_fields
+          before_update :update_date_fields
+          
+          scope :hasbegun, lambda { where("#{self.table_name}.start_date < NOW()") }
+          scope :overdue,  lambda { where("#{self.table_name}.due_date < NOW()")   }
+          scope :with_present_custom_field, lambda { |*args| 
+            joins(:custom_values).
+            where("custom_values.custom_field_id = ?", args.first.to_i).
+            where("custom_values.value NOT LIKE ''").
+            where("custom_values.value IS NOT NULL")
+          }
         end
       end
       
@@ -48,10 +57,9 @@ module RedmineAutoResubmissionIssuePatch
           ##########################################################
           # resubmission dates                                     #
           ##########################################################
-          if resubmission_rule && resubmission_date
+          if resubmission_rule.present?
           
             new_date, new_rule = RedmineAutoResubmission::calcfuturedate( resubmission_date.value, resubmission_rule.value )
-            
             resubmission_rule.value= new_rule                      if new_rule
             resubmission_date.value= new_date.strftime("%Y-%m-%d") if new_date
             @custom_field_values_changed= true                     if new_rule || new_date

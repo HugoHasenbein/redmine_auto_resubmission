@@ -16,6 +16,11 @@
   </p>
   
   <p>
+    <%= label_tag( 'settings[open_issues_only]', l(:label_setting_open_issues_only)) %>
+    <%= check_box_tag( 'settings[open_issues_only]', '1', settings['open_issues_only'] == '1') %>
+  </p>
+  
+  <p>
     <%= label_tag( 'settings[issue_resubmit_status_id]', l(:label_setting_resubmit_with_issue_status_id)) %>
     <%= select_tag('settings[issue_resubmit_status_id]', options_for_select([['', 0]] + issue_statuses.collect{|c| [c.name, c.id]}, (@settings['issue_resubmit_status_id'] || 0))) %>
   </p>
