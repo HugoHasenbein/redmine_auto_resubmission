@@ -176,6 +176,8 @@ That's about it.
 
 ### Change-Log
 
+1.0.7 added user edit privilege awareness
+
 1.0.6 added support to choose between resubmitting open or all issues
 
 1.0.5 Rails 5 / redmine 4+ support
