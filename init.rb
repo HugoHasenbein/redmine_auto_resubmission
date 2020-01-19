@@ -33,6 +33,11 @@
 #       added support to choose between resubmitting only open tickets or all tickets
 #       fixed a bug, in which tickets would not be updated
 #       simplified code
+#
+# 1.0.7
+#       addded support for permissions
+#       user may be set with rake task to only resubmit issues, which may be edited by 
+#       given user
 #       
 require 'redmine'
 
@@ -40,7 +45,7 @@ Redmine::Plugin.register :redmine_auto_resubmission do
   name 'Redmine Auto Resubmission plugin'
   author 'Stephan Wenzel'
   description 'This plugin provides a resubmission tool for issues'
-  version '1.0.6'
+  version '1.0.7'
   url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'
   author_url 'https://github.com/HugoHasenbein/redmine_auto_resubmission'
   
@@ -48,7 +53,7 @@ Redmine::Plugin.register :redmine_auto_resubmission do
                         'custom_field_id_rule'            => '',
                         'custom_field_id_start_date_rule' => '',
                         'custom_field_id_due_date_rule'   => '',
-                        'issue_status_id'                 => '',
+                        'issue_resubmit_status_id'        => '',
                         'resubmission_notice'   => "automatically resubmitted by plugin 'Redmine Auto Resubmission'"
                         },
            :partial => 'redmine_auto_resubmission/auto_resubmission_settings'

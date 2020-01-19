@@ -49,44 +49,47 @@ module RedmineAutoResubmissionIssuePatch
       
         def update_date_fields
           
-          resubmission_date, 
-          resubmission_rule,
-          start_date_rule,
-          due_date_rule = get_custom_values_for_rules
+          resubmission_date_field, 
+          resubmission_rule_field,
+          start_date_rule_field,
+          due_date_rule_field = get_custom_values_for_rules
           
           ##########################################################
           # resubmission dates                                     #
           ##########################################################
-          if resubmission_rule.present? && resubmission_date
+          if resubmission_rule_field.present? && resubmission_date_field.present?
           
-            new_date, new_rule = RedmineAutoResubmission::calcfuturedate( resubmission_date.value, resubmission_rule.value )
-            resubmission_rule.value= new_rule                      if new_rule
-            resubmission_date.value= new_date.strftime("%Y-%m-%d") if new_date
-            @custom_field_values_changed= true                     if new_rule || new_date
+            new_date, new_rule = RedmineAutoResubmission::calcfuturedate( resubmission_date_field.value, resubmission_rule_field.value )
+            resubmission_rule_field.value= new_rule                      if new_rule
+            resubmission_date_field.value= new_date.strftime("%Y-%m-%d") if new_date
+            @custom_field_values_changed= true                           if new_rule || new_date
           end
           
           ##########################################################
           # due_date extension (do before start date)              #
           ##########################################################
-          if due_date_rule.present?
+          if due_date_rule_field.present? && !read_only_attribute_names(User.current).include?('due_date')
           
-            new_date, new_rule = RedmineAutoResubmission::calcfuturedate( due_date, due_date_rule.value )
+            new_date, new_rule = RedmineAutoResubmission::calcfuturedate( due_date, due_date_rule_field.value )
             
-            self.due_date = new_date                               if new_date
-            due_date_rule.value= new_rule                          if new_rule
-            @custom_field_values_changed= true                     if new_rule
+            self.due_date = new_date                                     if new_date
+            due_date_rule_field.value= new_rule                          if new_rule
+            @custom_field_values_changed= true                           if new_rule
           end
           
           ##########################################################
           # start_date extension                                   #
           ##########################################################
-          if start_date_rule.present?
+          if start_date_rule_field.present? && !read_only_attribute_names(User.current).include?('start_date')
           
-            new_date, new_rule = RedmineAutoResubmission::calcfuturedate( start_date, start_date_rule.value )
+            new_date, new_rule = RedmineAutoResubmission::calcfuturedate( start_date, start_date_rule_field.value )
             
-            self.start_date = new_date                             if new_date
-            start_date_rule.value= new_rule                        if new_rule
-            @custom_field_values_changed= true                     if new_rule
+            if new_date.blank? || (self.due_date && new_date <= self.due_date)
+            
+              self.start_date = new_date                                 if new_date
+              start_date_rule_field.value= new_rule                      if new_rule
+              @custom_field_values_changed= true                         if new_rule
+            end
           end
           
           return true # always return true to not cause save validation errors
@@ -105,12 +108,14 @@ module RedmineAutoResubmissionIssuePatch
         #
         #
         def get_custom_values_for_rules
-          [
+          custom_field_ids = [
             Setting['plugin_redmine_auto_resubmission']['custom_field_id_date'],
             Setting['plugin_redmine_auto_resubmission']['custom_field_id_rule'],
             Setting['plugin_redmine_auto_resubmission']['custom_field_id_start_date_rule'],
             Setting['plugin_redmine_auto_resubmission']['custom_field_id_due_date_rule']
-          ].map {|s| s.present? ? visible_custom_value_for(s) : nil }
+          ] - read_only_attribute_names(User.current)
+          custom_field_ids &= editable_custom_fields(User.current).map{|cf| cf.id.to_s }
+          custom_field_ids.map {|s| s.present? ? visible_custom_value_for(s) : nil }
         end #def
         
       end #module

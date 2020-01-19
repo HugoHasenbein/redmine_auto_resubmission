@@ -38,7 +38,7 @@ class ResubmissionsController < ApplicationController
     
   rescue Exception => e 
     flash[:error] = e.message
-    redirect_to :back    
+    redirect_back_or_default plugin_settings_path("redmine_auto_resubmission")
   end #def
   
   # ------------------------------------------------------------------------------------ #
@@ -46,13 +46,15 @@ class ResubmissionsController < ApplicationController
     
     num = RedmineAutoResubmission.calc_all_resubmission_dates
     flash[:notice] = l(:text_successful_resubmission, :num => num )
-    redirect_to :back    
+    redirect_back_or_default plugin_settings_path("redmine_auto_resubmission")
     
-  rescue Exception => e 
+  rescue Exception => e
+  
     Rails.logger.info e.message
     Rails.logger.info e.backtrace.join("\n")
+    
     flash[:error] = e.message
-    redirect_to :back    
+    redirect_back_or_default plugin_settings_path("redmine_auto_resubmission")
   end #def
   
 end #class

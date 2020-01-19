@@ -26,7 +26,7 @@ module RedmineAutoResubmission
     # ----------------------------------------------------------------------------------- #
     def calc_all_resubmission_dates
     
-      new_status_id             = Setting['plugin_redmine_auto_resubmission']['issue_status_id'].presence
+      new_status_id             = Setting['plugin_redmine_auto_resubmission']['issue_resubmit_status_id'].presence
       cf_id_date                = Setting['plugin_redmine_auto_resubmission']['custom_field_id_date']
       
       cf_id_start_date_rule     = Setting['plugin_redmine_auto_resubmission']['custom_field_id_start_date_rule']
@@ -37,44 +37,59 @@ module RedmineAutoResubmission
       resubmission_notice       = Setting['plugin_redmine_auto_resubmission']['resubmission_notice'].to_s
       new_notice                = resubmission_notice.gsub(/##/, User.current.name )
       
-      issues                    = []
+      
       # careful: CAST(custom_values.value as DATE) <= NOW()
-      # may fail, because sql is not good in error catching
+      # may fail, because sql is not good at error catching
+      
+      issues = []
       if open_issues_only
-        issues += Issue.open.
+        issues += Issue.visible.open.
                   with_present_custom_field( cf_id_date ).
                   where("CAST(custom_values.value as DATE) <= NOW()").
-                  to_a if cf_id_date.present?
+                  distinct.to_a if cf_id_date.present?
+        issues += Issue.visible.open.hasbegun.
+                  with_present_custom_field( cf_id_start_date_rule ).
+                  to_a if cf_id_start_date_rule.present?
+        issues += Issue.visible.open.overdue.
+                  with_present_custom_field( cf_id_due_date_rule ).
+                  to_a if cf_id_due_date_rule.present?
       else 
-        issues += Issue.
+        issues += Issue.visible.
                   with_present_custom_field( cf_id_date ).
                   where("CAST(custom_values.value as DATE) <= NOW()").
-                  to_a if cf_id_date.present?
+                  distinct.to_a if cf_id_date.present?
+        issues += Issue.visible.hasbegun.
+                  with_present_custom_field( cf_id_start_date_rule ).
+                  to_a if cf_id_start_date_rule.present?
+        issues += Issue.visible.overdue.
+                  with_present_custom_field( cf_id_due_date_rule ).
+                  to_a if cf_id_due_date_rule.present?
       end
+      issues.uniq!
+      issues.sort!
       
-      issues += Issue.open.hasbegun.
-                with_present_custom_field( cf_id_start_date_rule ).
-                to_a if cf_id_start_date_rule.present?
-      
-      issues += Issue.open.overdue.
-                with_present_custom_field( cf_id_due_date_rule ).
-                to_a if cf_id_due_date_rule.present?
+      resubmitted_issues = 0
       
       issues.each do |issue|
       
-        # mark issue with resubmission notice
-        new_journal = issue.init_journal( User.current, new_notice )
-        new_journal.save
+        if User.current.allowed_to?(:edit_issues, issue.project )
         
-        # change status if chosen to do so
-        issue.status_id = new_status_id if new_status_id.present?
+          # mark issue with resubmission notice
+          new_journal = issue.init_journal( User.current, new_notice )
+          
+          # change status if chosen to do so
+          issue.status_id = new_status_id if new_status_id.present?
         
-        # issue.save triggers recalculation of new date and new rule
-        issue.save
+          # issue.save triggers recalculation of new date and new rule
+          issue.save
+          
+          # count the number of saved issues
+          resubmitted_issues += 1
+        end
         
       end #each
       
-      issues.length
+      resubmitted_issues
       
     end #def
     
@@ -83,8 +98,10 @@ module RedmineAutoResubmission
     def calcfuturedate( obj, rule )
       
       date = case obj.class.name
-        when "Date", "DateTime"
+        when "Date"
           obj
+        when "DateTime"
+          obj.to_date
         when "String"
           obj.to_date rescue nil
         else
@@ -180,14 +197,14 @@ module RedmineAutoResubmission
             new_date = startdate.advance( :years => num.to_i)
         when "m"
             new_date = startdate.advance( :weeks => num.to_i).monday 
-            #new_date = startdate.advance( :weeks => (num.to_i+1)).monday if new_date <= today 
+            new_date = startdate.advance( :weeks => (num.to_i+1)).monday if new_date <= today 
         when "q"
             new_date = startdate.advance( :months => 3 * num.to_i).beginning_of_quarter
-            #new_date = startdate.advance( :months => 3 * (num.to_i+1)).beginning_of_quarter if new_date <= today 
+            new_date = startdate.advance( :months => 3 * (num.to_i+1)).beginning_of_quarter if new_date <= today 
         when "C"
             # calendar week 1 is the week containing Jan. 4th
-            new_date = DateTime.new(startdate.year, 1, 4).advance( :weeks => (num.to_i - 1))
-            #new_date = DateTime.new(startdate.year+1, 1, 4).advance( :weeks => (num.to_i - 1)) if new_date <= today
+            new_date = Date.new(startdate.year, 1, 4).advance( :weeks => (num.to_i - 1))
+            new_date = Date.new(startdate.year+1, 1, 4).advance( :weeks => (num.to_i - 1)) if new_date <= today
         else
             new_date = startdate
       end #case
