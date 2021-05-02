@@ -108,18 +108,17 @@ The syntax of the resubmission-rule consists of three to four parameters:
      The control signs must be present in the above order, namely: - ! *. Any arbitrary
      subset of the control signs or all of the three control signs may be omitted.
      
-Example: W1F  - one week further, first day, so monday  
-Example: M3M  - three months further from today, mid-term, so 15th of month  
-Example: q1-  - next quarter, first day of quarter, so 1st Jan., Apr., Jul. or Oct., after one calculation further calculations are stopped, rule is deleted.   
-Example: D1-  - tomorrow, then delete rule  
-Example: D1-! - tomorrow!, even if a resubmission-date is present in the resubmission-date-field  
+Example:
+`W1F`  - one week further, first day, so monday  
+`M3M`  - three months further from today, mid-term, so 15th of month  
+`q1-`  - next quarter, first day of quarter, so 1st Jan., Apr., Jul. or Oct., after one calculation further calculations are stopped, rule is deleted.   
+`D1-`  - tomorrow, then delete rule  
+`D1-!` - tomorrow!, even if a resubmission-date is present in the resubmission-date-field  
                
 Resubmission dates are always calculated for the future, never for the past.  
-So W0F would calculate "next monday"", if calculated on a friday, though W0 stands for 
-this week (W0 zero weeks further, first day, monday) and would calculate last monday. 
+So W0F would calculate "next monday"", if calculated on a friday, though W0 stands for this week (W0 zero weeks further, first day, monday) and would calculate last monday. 
 In this case, the calculated date is advanced monday further into the future.  
-So q0M would calculate "next quarter mid-term" if calculated near to lapse of current 
-quarter. In this case the calculated date is advanced one quarter into the future.
+So q0M would calculate "next quarter mid-term" if calculated near to lapse of current quarter. In this case the calculated date is advanced one quarter into the future.
 
 **No I know the codes, what next?**
 
