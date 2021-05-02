@@ -80,17 +80,17 @@ The gist of this plugin is to tell the plugin when the issue should reappear. Fo
 The syntax of the resubmission-rule consists of three to four parameters:
 1. parameter: epoch-identifier
 
- D - stands for _D_ays
+   D - stands for _D_ays
  
- W - stands for _W_eeks
+   W - stands for _W_eeks
  
- m - stands for _m_ondays
+   m - stands for _m_ondays
  
- M - stands for _M_onths
+   M - stands for _M_onths
  
- q - stands for _q_uarters
+   q - stands for _q_uarters
  
- Y - stands for _Y_ears
+   Y - stands for _Y_ears
 
 2. parameter: integer
 
