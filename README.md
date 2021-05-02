@@ -73,7 +73,7 @@ Below the configuratiuon you can experiment with the resubmision codes. We get t
 
 #### About resubmssion codes
 
-The gist of this plugin is to tell the plugin when the issue should reappear. For that, the codes where pasted into the custom field list. If you are comfortable working with codes you can alter the rule filed to a text field and enter the codes directly. Using the preconfigured list though makes resubmission available in the issue context menu.
+The gist of this plugin is to tell the plugin when the issue should reappear. For that, the codes where pasted into the custom field list. If you are comfortable working with codes you can alter the rule field to a text field and enter the codes directly. Using the preconfigured list though makes resubmission available in the issue context menu.
 
 **What is the syntax of those codes?***
 
