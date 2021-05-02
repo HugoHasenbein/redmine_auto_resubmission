@@ -80,41 +80,30 @@ The gist of this plugin is to tell the plugin when the issue should reappear. Fo
 The syntax of the resubmission-rule consists of three to four parameters:
 1. parameter: epoch-identifier
 
-   D - stands for _D_ays
- 
-   W - stands for _W_eeks
- 
-   m - stands for _m_ondays
- 
-   M - stands for _M_onths
- 
-   q - stands for _q_uarters
- 
-   Y - stands for _Y_ears
+`D` - stands for _D_ays  
+`W` - stands for _W_eeks  
+`m` - stands for _m_ondays  
+`M` - stands for _M_onths  
+`q` - stands for _q_uarters  
+`Y` - stands for _Y_ears
 
 2. parameter: integer
 
- n - stands for the number of epochs
+`n` - stands for the number of epochs
  
 3. position of day within epoch 
 
- F - stands for _F_irst day of epoch, like first day of month, monday, first day of 
-     quarter, or January 1st
- M - stands for _M_id of epoch, like 15th day of month, wednesday, 15th of 
-     mid-of-quarter or June 30th
- L - stands for _L_ast of epoch, like last day of month, friday (last working day),
-     last day of quarter or December 31st
- W - stands for _W_eekday (Monday), if calculated day falls on a Saturday or Sunday
- X - stands for no correction
+`F` - stands for _F_irst day of epoch, like first day of month, monday, first day of quarter, or January 1st  
+`M` - stands for _M_id of epoch, like 15th day of month, wednesday, 15th of mid-of-quarter or June 30th  
+`L` - stands for _L_ast of epoch, like last day of month, friday (last working day), last day of quarter or December 31st  
+`W` - stands for _W_eekday (Monday), if calculated day falls on a Saturday or Sunday  
+`X` - stands for no correction
 
 3. control of date calculation
 
- - - the sign "-" is a killswitch. After one date calculation the resubmission rule is 
-     deleted, so no further resubmissions happen
- ! - the sign "!" is a force sign to force date calculation even if a resubmission date
-     present
- * - the sign "*" is a mock switch. The mock-switch is deleted from the resubmission-rule
-     and no resubmission-date is calculated. Needed for Redmine Attribute-Quickie plugin
+`-` - the sign "-" is a killswitch. After one date calculation the resubmission rule is deleted, so no further resubmissions happen  
+`!` - the sign "!" is a force sign to force date calculation even if a resubmission date is present  
+`*` - the sign "*" is a mock switch. The mock-switch is deleted from the resubmission-rule and no resubmission-date is calculated. Needed for Redmine Attribute-Quickie plugin  
      
      The control signs must be present in the above order, namely: - ! *. Any arbitrary
      subset of the control signs or all of the three control signs may be omitted.
