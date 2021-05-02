@@ -13,7 +13,7 @@ From now (version 1.0.7) on the rake task needs to be provided a user id for a u
 
 ### Use case
 
-An job is done. Need to follow up in a week or two? Mark the issue to reappear then. The issue will turn up in your current issues then.
+A job (iisue) is done. Need to follow up in a week or two? Mark the issue to reappear then. The issue will turn up in your current issues then.
 
 ### Install
 
