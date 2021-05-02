@@ -108,10 +108,10 @@ The syntax of the resubmission-rule consists of three to four parameters:
      The control signs must be present in the above order, namely: - ! *. Any arbitrary
      subset of the control signs or all of the three control signs may be omitted.
      
-Example: W1F - one week further, first day, so monday  
-Example: M3M - three months further from today, mid-day, so 15th of month  
-Example: q1- - next quarter, first day of quarter, so 1st Jan., Apr., Jul. or Oct., after one calculation further calculations are stopped, rule is deleted.   
-Example: D1- - tomorrow, then delete rule  
+Example: W1F  - one week further, first day, so monday  
+Example: M3M  - three months further from today, mid-term, so 15th of month  
+Example: q1-  - next quarter, first day of quarter, so 1st Jan., Apr., Jul. or Oct., after one calculation further calculations are stopped, rule is deleted.   
+Example: D1-  - tomorrow, then delete rule  
 Example: D1-! - tomorrow!, even if a resubmission-date is present in the resubmission-date-field  
                
 Resubmission dates are always calculated for the future, never for the past.  
