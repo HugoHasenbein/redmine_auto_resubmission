@@ -39,7 +39,7 @@ A job (iisue) is done. Need to follow up in a week or two? Mark the issue to rea
 
 1. You need at least one project having the plugin added as a module. 
 
-Goto the `Projects` -> `Settings` -> `Choose` modules tab. Select Auto Resubmission and save.
+Goto the `Projects` -> `Settings` -> `Modules`. Select `Auto Resubmission` and save.
 
 2. You need to have the proper privileges
 
