@@ -108,7 +108,8 @@ The syntax of the resubmission-rule consists of three to four parameters:
      The control signs must be present in the above order, namely: - ! *. Any arbitrary
      subset of the control signs or all of the three control signs may be omitted.
      
-Example:
+Examples:
+
 `W1F`  - one week further, first day, so monday  
 `M3M`  - three months further from today, mid-term, so 15th of month  
 `q1-`  - next quarter, first day of quarter, so 1st Jan., Apr., Jul. or Oct., after one calculation further calculations are stopped, rule is deleted.   
