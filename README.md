@@ -39,27 +39,27 @@ A job (iisue) is done. Need to follow up in a week or two? Mark the issue to rea
 
 1. You need at least one project having the plugin added as a module. 
 
-Goto the Projects->Settings->Choose modules tab. Select Auto Resubmission and save.
+Goto the `Projects` -> `Settings` -> `Choose` modules tab. Select Auto Resubmission and save.
 
 2. You need to have the proper privileges
 
-Goto Administration->Roles and Permissions->Select your role->Select Auto Resubmission: Check "Test resubmission-rules (x)" and "Recalculate resubmissions of all tickets (x)", the latter being very powerful.
+Goto `Administration` -> `Roles and Permissions` -> `Select your role` -> `Select Auto Resubmission`: Check "Test resubmission-rules (x)" and "Recalculate resubmissions of all tickets (x)", the latter being very powerful.
 
 3. Create two custom fields for issues
 
 Goto Adminstration->Custom fields
 
-a) create one first custom date-field and name it "Resubmission Date" (or what ever you like) 
-b) create one second custom list-field and name ist "Resubmission Rule" (or what ever you like) 
+a) create one first custom date-field and name it "Resubmission Date" (or what ever you like)   
+b) create one second custom list-field and name ist "Resubmission Rule" (or what ever you like)  
 
 4. Configure Plugin
 
 Goto Administration->Plugins->Redmine Auto Resubmission->Configure
 
-a) choose field for resubmission-date (the date field you have created in 3.)
-b) choose field for resubmission-rule (the rule field you have created in 3.)
-c) choose status for resubmission (this will be status, the issue is set to on resubmission)
-d) choose a line of text you want to add to a new issue journal on resubmission. Leave empty if you do not wish to add text.
+a) choose field for resubmission-date (the date field you have created in 3.)  
+b) choose field for resubmission-rule (the rule field you have created in 3.)  
+c) choose status for resubmission (this will be status, the issue is set to on resubmission)  
+d) choose a line of text you want to add to a new issue journal on resubmission. Leave empty if you do not wish to add text.  
 
 Press Apply-Button (Save)
 
@@ -109,12 +109,12 @@ The syntax of the resubmission-rule consists of three to four parameters:
      subset of the control signs or all of the three control signs may be omitted.
      
 Example: W1F - one week further, first day, so monday 
-Example: M3M - three months further from today, mid-day, so 15th of month
+Example: M3M - three months further from today, mid-day, so 15th of month  
 Example: q1- - next quarter, first day of quarter, so 1st Jan., Apr., Jul. or Oct., after
-               one calculation further calculations are stopped, riule is deleted.
+               one calculation further calculations are stopped, riule is deleted.  
 Example: D1- - tomorrow, then delete rule 
 Example: D1-! - tomorrow!, even if a resubmission-date is present in the 
-               resubmission-date-field
+               resubmission-date-field  
                
 Resubmission dates are always calculated for the future, never for the past. 
 So W0F would calculate "next monday"", if calculated on a friday, though W0 stands for 
