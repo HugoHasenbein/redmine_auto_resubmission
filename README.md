@@ -146,7 +146,7 @@ a) first way is elegant, but requires cron. There is a rake task added to the pl
 The above line called with cron once a day short after midnight, calculates all resubmissions. Lookup how to configure cron jobs. Be aware to properly set the RAILS_ENV variable and execute cron with the right user rights and environment for rails.
 
 NOTE: the number [1] in squared brackets stands for the admin User-ID, which is genarally not a good idea. You MUST provide a user ID having privileges to view issues and to edit issues you want to resubmit by the rake task.
-NOTE: if you specify a custom field for the resubmission rule or the resubmission date for only a ceratin role, then the user id you supply for the rake task must have privileges to actually edit these fields. 
+NOTE: if you specify a custom field for the resubmission rule or the resubmission date for only a certain role, then the user id you supply for the rake task must have privileges to actually edit these fields. 
 NOTE: if you define a workflow in which the resubmission field cannot be edited then the rake task will not alter the field.
 
 If you define the custom filed for all roles and Anonymous users can edit the field, then the rake task runs well without the ID.
